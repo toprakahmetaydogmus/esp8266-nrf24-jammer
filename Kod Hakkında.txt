@@ -1,0 +1,113 @@
+📜 Kod Açıklaması (Türkçe)
+Bu proje, ESP8266 (NodeMCU) ile nRF24L01 modülünü kullanarak 2.4 GHz bandında sinyal testleri yapar.
+Kodun ana bölümleri şunlardır:
+
+Kütüphaneler ve Donanım Tanımları
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
+#include <SPI.h>
+#include <RF24.h>
+ESP8266WiFi → ESP’yi Access Point modunda çalıştırmak için
+
+ESP8266WebServer → Web arayüz oluşturmak için
+
+SPI → nRF24L01 haberleşmesi için
+
+RF24 → nRF24L01 kontrolü için
+
+Donanım Pinleri
+RF24 radio(D4, D8); // CE, CSN
+D4 → CE pini
+
+D8 → CSN pini
+
+SPI hatları (MISO, MOSI, SCK) otomatik olarak ESP8266’nın donanım SPI pinlerini kullanır.
+
+Wi-Fi Kanalları Tanımı
+const int wifiFrequencies[] = {2412, 2417, 2422, ...};
+Sadece Wi-Fi modunda hedeflenecek frekanslar (MHz cinsinden)
+
+Web Arayüzü
+
+htmlPage() fonksiyonu ile tarayıcıdan erişilen basit HTML kontrol paneli oluşturulur.
+
+/set endpoint’i ile mod değişikliği yapılır.
+
+Saldırı Fonksiyonları
+
+fullAttack() → nRF24L01 modülünü 0–79 kanal arasında hızlıca tarar (tüm 2.4 GHz bandı).
+
+wifiAttack() → Yalnızca tanımlı Wi-Fi kanallarına saldırır.
+
+Buton Desteği
+
+attachInterrupt() ile D3 pinine bağlı buton, donanımsal kesme ile algılanır.
+
+Basıldığında tam jammer modu ile idle modu arasında geçiş yapar.
+
+Setup
+
+nRF24L01 başlatılır ve sabit taşıyıcı (constant carrier) modunda yayın yapacak şekilde ayarlanır.
+
+ESP8266, ESP_Jammer adlı Wi-Fi ağı oluşturur. Şifre = 12345678
+
+Loop
+
+Web arayüz istekleri dinlenir (server.handleClient()).
+
+Mod seçimine göre fullAttack(), wifiAttack() veya bekleme yapılır.
+
+📜 Code Description (English)
+This project uses ESP8266 (NodeMCU) and nRF24L01 to perform 2.4 GHz band signal tests.
+Main parts of the code:
+
+Libraries & Hardware Definitions
+
+ESP8266WiFi → To run ESP as an Access Point
+
+ESP8266WebServer → To create a web-based control interface
+
+SPI → For nRF24L01 communication
+
+RF24 → To control the nRF24L01 module
+
+Hardware Pins
+
+CE → D4, CSN → D8
+
+SPI pins (MISO, MOSI, SCK) use hardware SPI pins of ESP8266.
+
+Wi-Fi Channels Array
+
+Only Wi-Fi mode uses predefined channels in MHz.
+
+Web Interface
+
+htmlPage() builds a simple HTML control panel.
+
+/set endpoint changes the operating mode.
+
+Attack Functions
+
+fullAttack() → Cycles through all 80 channels in the 2.4 GHz band.
+
+wifiAttack() → Targets only predefined Wi-Fi channels.
+
+Button Support
+
+Uses hardware interrupts on D3 pin.
+
+Toggles between full jammer mode and idle mode.
+
+Setup
+
+Initializes nRF24L01 and sets it to constant carrier mode.
+
+Creates an AP named ESP_Jammer. Password = 12345678
+
+Loop
+
+Handles web interface requests.
+
+Runs the selected attack function or stays idle.
+
