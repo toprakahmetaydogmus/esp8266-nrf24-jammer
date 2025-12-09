@@ -80,7 +80,7 @@ Three modes available:
 ## 👨‍💻 Geliştirici / Developer
 **Toprak Ahmet Aydoğmuş**  
 Siber Güvenlik Uzmanı | BTK Sertifikalı  
-30+ ulusal/uluslararası sertifika sahibi | Penetrasyon testi, ağ güvenliği, adli bilişim uzmanı  
+40+ ulusal/uluslararası sertifika sahibi | Penetrasyon testi, ağ güvenliği, adli bilişim uzmanı  
 🌐 [Web Sitesi](https://cybertoprak.wixsite.com/siberegitim)  
 🔗 [LinkedIn](https://www.linkedin.com/in/toprak-ahmet-aydoğmuş-60462534b/)
 
