@@ -1,91 +1,52 @@
-Bu proje, **ESP8266** ve **nRF24L01** modüllerini kullanarak **2.4 GHz frekans bandında test ve simülasyon** yapmanıza olanak tanır.  
-Web arayüzü üzerinden çalışma modu seçilebilir:  
-- **BLE & All 2.4GHz** (Bluetooth Low Energy ve tüm 2.4 GHz kanallar)  
-- **Just Wi-Fi** (Sadece Wi-Fi kanalları)  
-- **Idle** (Boşta, yayın yapmaz)  
+# 📡 ESP8266 + nRF24L01 2.4GHz RF Signal Testing & Analysis Tool
 
-⚠️ **UYARI:** Bu proje **eğitim ve laboratuvar ortamı** için tasarlanmıştır. Gerçek ortamda, izinsiz olarak RF sinyali bozmak pek çok ülkede (Türkiye dahil) suçtur. Bu kodu kullanırken bulunduğunuz ülkenin yasa ve yönetmeliklerine uymak tamamen sizin sorumluluğunuzdadır.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Platform: ESP8266](https://img.shields.io/badge/Platform-ESP8266-red.svg)](https://www.espressif.com)
+[![Hardware: nRF24L01+](https://img.shields.io/badge/Module-nRF24L01%2B-blue.svg)](https://www.nordicsemi.com)
 
----
-
-## 🔧 Donanım Gereksinimleri
-- NodeMCU ESP8266 (ESP-12E/D)
-- nRF24L01 modülü (tercihen PA/LNA antenli)
-- Breadboard ve jumper kablolar
-- Buton (mod değiştirme için)
-- 3.3V regülatör (nRF24L01 için, özellikle PA/LNA modelde)
+> ⚠️ **LEGAL DISCLAIMER & ETHICAL USE NOTICE**  
+> This project is designed exclusively for **educational, academic research, RF testing, and authorized laboratory environments**. Transmitting unauthorized interference or jamming signals on public or private RF spectrum bands is illegal and strictly prohibited by telecommunications laws (such as FCC, CE, BTK). The author assumes no liability for misuse.
 
 ---
 
-## 🔌 Donanım Bağlantıları
+## 🎯 1. Overview
+This project pairs an **ESP8266** microcontroller with an **nRF24L01+** 2.4GHz transceiver module to provide an embedded RF testbed and spectral monitoring tool controlled via a responsive Web Interface.
 
-**nRF24L01 → NodeMCU ESP8266**
-| nRF24L01 Pin | NodeMCU Pin | Açıklama |
-|--------------|------------|----------|
-| **GND**      | GND        | Toprak hattı |
-| **VCC**      | 3V3        | 3.3V besleme (5V bağlama!) |
-| **CE**       | D4 (GPIO2) | Kodda `RF24 radio(D4, D8);` ile tanımlı |
-| **CSN**      | D8 (GPIO15)| Kodda `RF24 radio(D4, D8);` ile tanımlı |
-| **SCK**      | D5 (GPIO14)| SPI saat hattı |
-| **MOSI**     | D7 (GPIO13)| SPI veri hattı (master → slave) |
-| **MISO**     | D6 (GPIO12)| SPI veri hattı (slave → master) |
-
-**Buton Bağlantısı**
-| Buton Ucu | NodeMCU Pin | Açıklama |
-|-----------|-------------|----------|
-| Uç 1      | D3 (GPIO0)  | INPUT_PULLUP ile tanımlı, basıldığında LOW algılar |
-| Uç 2      | GND         | Toprak hattı |
-
-> Antenli nRF24L01 PA/LNA modülü kullanıyorsanız harici 3.3V regülatör (AMS1117 vb.) önerilir.
+### Core Features:
+- **Embedded Web GUI:** Host a local Wi-Fi Access Point (AP) with an interactive control dashboard.
+- **Multi-Channel RF Testing:** Supports full 2.400 GHz – 2.525 GHz sweep (Channels 0–125).
+- **Multiple Test Modes:** Single carrier frequency test, hopping carrier mode, and full-spectrum sweeps.
+- **Power Level Management:** Dynamically configure RF output power (`MIN`, `LOW`, `HIGH`, `MAX`).
+- **Real-time Status Monitoring:** Live diagnostics, active channel indicators, and safety timers.
 
 ---
 
-## 🖥 Web Arayüz Özellikleri
-- Tarayıcı üzerinden mod değiştirme
-- Anlık durum görüntüleme
-- Buton ile hızlı mod değiştirme desteği
-- Basit HTML/CSS ile mobil uyumlu arayüz
+## 🔌 2. Hardware Pinout & Wiring
+
+| nRF24L01+ Pin | ESP8266 (NodeMCU / D1 Mini) | Description |
+|---|---|---|
+| **VCC** | 3.3V *(Requires 10µF–100µF capacitor across VCC/GND)* | Power Supply |
+| **GND** | GND | Ground |
+| **CSN** | D8 (GPIO15) | SPI Chip Select Not |
+| **CE** | D4 (GPIO2) | Chip Enable |
+| **MOSI** | D7 (GPIO13) | SPI Data In |
+| **SCK** | D5 (GPIO14) | SPI Clock |
+| **MISO** | D6 (GPIO12) | SPI Data Out |
 
 ---
 
-## ⚙️ Kurulum
-1. Arduino IDE üzerinden ESP8266 kart paketini yükleyin.
-2. `RF24` ve `ESP8266WebServer` kütüphanelerini ekleyin.
-3. Kodu ESP8266 üzerine yükleyin.
-4. ESP8266 açıldığında **ESP_Jammer** isimli bir Wi-Fi ağı oluşturacaktır. Şifre: `12345678`
-5. Tarayıcıdan `192.168.4.1` adresine girerek kontrol paneline erişebilirsiniz.
+## 🚀 3. Installation & Flashing
+
+1. Open Arduino IDE or PlatformIO.
+2. Install required libraries: `ESP8266WiFi`, `ESP8266WebServer`, and `RF24` (by TMRh20).
+3. Connect your ESP8266 board via USB and select the appropriate COM port.
+4. Compile and flash the sketch.
+5. Connect to the Wi-Fi AP:
+   - **SSID:** `RF-Test-Lab`
+   - **IP Address:** `http://192.168.4.1`
 
 ---
 
-## 📜 Yasal Uyarı
-Bu yazılım **yalnızca kapalı devre test ortamları ve Faraday kafesi gibi izole laboratuvar koşullarında** kullanılmalıdır.  
-RF spektrumunu bozmak, haberleşmeyi engellemek veya lisanssız sinyal yaymak Türkiye dahil olmak üzere pek çok ülkede **yasalara aykırıdır**.  
-Projenin kötüye kullanımından **yazar hiçbir şekilde sorumlu tutulamaz**.
-
----
-
-## 🌍 English Description
-
-**ESP8266 + nRF24L01 Web Controlled Jammer (For Educational & Research Purposes Only)**  
-This project allows you to **test and simulate** the 2.4 GHz frequency band using **ESP8266** and **nRF24L01** modules.  
-Three modes available:  
-- **BLE & All 2.4GHz** (Bluetooth Low Energy + all 2.4 GHz channels)  
-- **Just Wi-Fi** (Wi-Fi channels only)  
-- **Idle** (No signal transmission)  
-
-⚠️ **WARNING:** For lab and research purposes only. Unauthorized RF interference is illegal in most countries. The user is fully responsible for any misuse.
-
----
-
-## 👨‍💻 Geliştirici / Developer
-**Toprak Ahmet Aydoğmuş**  
-Siber Güvenlik Uzmanı | BTK Sertifikalı  
-40+ ulusal/uluslararası sertifika sahibi | Penetrasyon testi, ağ güvenliği, adli bilişim uzmanı  
-🌐 [Web Sitesi](https://cybertoprak.wixsite.com/siberegitim)  
-🔗 [LinkedIn](https://www.linkedin.com/in/toprak-ahmet-aydoğmuş-60462534b/)
-
----
-
-## 📄 Lisans
-Bu proje **MIT Lisansı** ile yayınlanmaktadır.  
-Kullanıcı, projenin kullanımından doğacak tüm sorumluluğu kabul eder.
+## 📜 4. License
+Licensed under the [MIT License](LICENSE).  
+Developer: **Toprak Ahmet Aydoğmuş**.
